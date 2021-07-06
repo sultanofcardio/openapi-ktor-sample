@@ -4,10 +4,7 @@ import com.sultanofcardio.openapi.components.securityscheme.ApiKeyLocation
 import com.sultanofcardio.openapi.components.securityscheme.apiKey
 import com.sultanofcardio.openapi.components.securityscheme.basicAuth
 import com.sultanofcardio.openapi.components.securityscheme.oauth2
-import com.sultanofcardio.openapi.models.HtmlContent
-import com.sultanofcardio.openapi.models.JsonContent
-import com.sultanofcardio.openapi.models.RequestBody
-import com.sultanofcardio.openapi.models.Tag
+import com.sultanofcardio.openapi.models.*
 import com.sultanofcardio.openapi.openapi
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -39,7 +36,10 @@ fun Application.module() {
                 """.trimIndent()
                 termsOfService = "http://swagger.io/terms/"
                 contact { email = "apiteam@swagger.io" }
-                license("Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0.html")
+                license(
+                    name = "Apache 2.0",
+                    url = "http://www.apache.org/licenses/LICENSE-2.0.html"
+                )
             }
             externalDocs("http://swagger.io", "Find out more about Swagger")
 
@@ -48,11 +48,10 @@ fun Application.module() {
                 description = "Access to Petstore orders"
                 externalDocs("http://swagger.io", "Find out more about our store")
             }
-            val petTag = Tag("pet").apply {
+            val petTag = tag("pet") {
                 description = "Everything about your Pets"
                 externalDocs("http://swagger.io", "Find out more")
             }
-            tags(petTag)
 
             val petStoreAuth = oauth2("petstore_auth") { flows ->
                 val url = "https://petstore3.swagger.io/oauth/"
@@ -119,17 +118,6 @@ fun Application.module() {
                                 }
                             }
                             handle { call.respond(samplePet) }
-                        }
-                        post {
-                            summary = "Add a new pet to the store"
-                            tags(petTag)
-                        }
-
-                        get("/findByStatus") {
-                            tags(petTag)
-                            handle {
-                                call.respondText { "Hello world" }
-                            }
                         }
                     }
                 }
